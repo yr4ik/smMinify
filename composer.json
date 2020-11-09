@@ -2,7 +2,7 @@
     "name": "yr4ik/node-smarty-minify",
     "type": "library",
     "description": "Run modules node.js in you php.",
-    "keywords": ["js" "ungflyjs", "minify", "css", "scss", "less", "combine media", "node.js"],
+    "keywords": ["js", "ungflyjs", "minify", "css", "scss", "less", "combine media", "node.js"],
     "license": "MIT",
     "authors": [
         {
