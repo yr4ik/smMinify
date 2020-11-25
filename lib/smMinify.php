@@ -14,23 +14,35 @@ class smMinify
 	private $vendor_dir;
 	
 	
-    public function __construct()
+    public function __construct($node_dir=false)
 	{
 		
 		if(!function_exists('exec'))
 			throw new \Exception('Function exec required for smMinify');
 
-		$this->vendor_dir = __DIR__ . '/vendor';
+		
+		if(empty($node_dir))
+			$this->vendor_dir = __DIR__ . '/vendor';
+		else
+			$this->vendor_dir = rtrim($node_dir, '/');
 				
 		if(!is_dir($this->vendor_dir . '/node_modules') || filemtime($this->vendor_dir . '/package.json') > filemtime($this->vendor_dir . '/node_modules') )
 		{
+			if(is_file($this->vendor_dir . '/node_modules/.lock'))
+				die('nodejs was install');
+			
 			$exec = array();
 			$exec[] = 'cd ' . $this->vendor_dir;
+			
+			$exec[] = 'touch node_modules/.lock';
 			
 			if(is_dir($this->vendor_dir . '/node_modules'))
 				$exec[] = 'rm -rf node_modules/';
 			
 			$exec[] = 'npm install --no-package-lock 2>&1';
+			
+			$exec[] = 'rm node_modules/.lock';
+			
 			exec(implode(' && ', $exec));
 		}
 	}
