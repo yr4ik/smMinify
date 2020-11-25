@@ -13,7 +13,11 @@ class smMinify
 {
 	private $vendor_dir;
 	
-	
+    /**
+	 * Constructor
+	 * Set directory of node modules $this->vendor_dir
+     * @param   string   $node_dir
+     */
     public function __construct($node_dir=false)
 	{
 		
@@ -73,7 +77,7 @@ class smMinify
     /**
      * @param   mixed   $js
      * @throws Exception
-     * @return  array
+     * @return  string
      */
     public function exec_js($js, $data=array())
     {
@@ -123,7 +127,7 @@ class smMinify
      * @param   object  $fp         php://stdin
      * @param   string  $string
      * @param   int     $buflen
-     * @return  string
+     * @return  written bytes
      */
     private function fwrite_stream($fp, $string, $buflen = 4096)
     {
