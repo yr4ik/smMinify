@@ -107,6 +107,8 @@ class smMinify
         if (!is_resource($nodejs)) {
             throw new \Exception('Could not reach node runtime');
         }
+		
+		$data['node_modules_dir'] = $this->vendor_dir . '/node_modules/';
 
         $this->fwrite_stream($pipes[0],
             json_encode($data));
