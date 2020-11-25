@@ -1,5 +1,10 @@
 {
-	"name": "node-smarty-minify",
+	"name": "smminify",
+	"version": "1.0.1",
+	"author": {
+		"name": "Polevik Yurii",
+		"email": "yr4ik_07@online.ua"
+	},
 	"dependencies": {
 		"uglify-js": "^3.11",
 		"postcss": "^8.1",
