@@ -18,7 +18,7 @@ class smMinify
 	{
 		
 		if(!function_exists('exec'))
-			throw new Exception('Function exec required for smMinify');
+			throw new \Exception('Function exec required for smMinify');
 
 		$this->vendor_dir = __DIR__ . '/vendor';
 				
@@ -43,16 +43,14 @@ class smMinify
     public function exec_css($css, $data=array())
     {
 		if(!is_dir($this->vendor_dir . '/node_modules'))
-			throw new Exception('Not install node modules');
+			throw new \Exception('Not install node modules');
 		
 		$data['css'] = $css;
 
 		$output = $this->exec_proc($data);
 
-// var_dump($output);
-// exit;
         if ($output['status'] == 'error') {
-            throw new Exception($output['error']);
+            throw new \Exception($output['error']);
         }
         
         return array($output['code'], $output['map'], $output['src_files']);
@@ -68,14 +66,14 @@ class smMinify
     public function exec_js($js, $data=array())
     {
 		if(!is_dir($this->vendor_dir . '/node_modules'))
-			throw new Exception('Not install node modules');
+			throw new \Exception('Not install node modules');
 
 		$data['js'] = (array) $js;
 		
 		$output = $this->exec_proc($data);
 		
         if ($output['status'] == 'error') {
-            throw new Exception($output['error']);
+            throw new \Exception($output['error']);
         }
         
         return $output['code'];
@@ -91,7 +89,7 @@ class smMinify
         );
 
         if (!is_resource($nodejs)) {
-            throw new Exception('Could not reach node runtime');
+            throw new \Exception('Could not reach node runtime');
         }
 
         $this->fwrite_stream($pipes[0],
