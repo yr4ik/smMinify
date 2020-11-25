@@ -25,12 +25,15 @@ class smMinify
 			throw new \Exception('Function exec required for smMinify');
 
 		
-		if(empty($node_dir))
+		if(empty($node_dir)){
 			$this->vendor_dir = __DIR__ . '/vendor';
-		else
+		}else{
 			$this->vendor_dir = rtrim($node_dir, '/');
-				
-		if(!is_dir($this->vendor_dir . '/node_modules') || filemtime($this->vendor_dir . '/package.json') > filemtime($this->vendor_dir . '/node_modules') )
+			if(!is_dir($this->vendor_dir))
+				mkdir($this->vendor_dir, 0755, true);
+		}
+
+		if(!is_dir($this->vendor_dir . '/node_modules') || filemtime( __DIR__ . '/vendor/package.json') > filemtime($this->vendor_dir . '/node_modules') )
 		{
 			if(is_file($this->vendor_dir . '/node_modules/.lock'))
 				die('nodejs was install');
@@ -38,15 +41,20 @@ class smMinify
 			$exec = array();
 			$exec[] = 'cd ' . $this->vendor_dir;
 			
-			$exec[] = 'touch node_modules/.lock';
-			
+
 			if(is_dir($this->vendor_dir . '/node_modules'))
 				$exec[] = 'rm -rf node_modules/';
+
+			$exec[] = 'mkdir node_modules/';
+			$exec[] = 'touch node_modules/.lock';
+			
+			if(!is_file($this->vendor_dir . '/package.json'))
+				$exec[] = 'cp "' . __DIR__ . '/vendor/package.json" "package.json"';
 			
 			$exec[] = 'npm install --no-package-lock 2>&1';
 			
 			$exec[] = 'rm node_modules/.lock';
-			
+
 			exec(implode(' && ', $exec));
 		}
 	}
