@@ -9,6 +9,6 @@
 		"node-sass": "^4.12",
 		"cssnano": "^4.1",
 		"autoprefixer": "^10.0",
-		"css-mqpacker": "^7.0"
+		"node-css-mqpacker": "^8.0"
 	}
 }
