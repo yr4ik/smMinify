@@ -1,5 +1,5 @@
 {
-    "name": "yr4ik/node-smarty-minify",
+    "name": "yr4ik/smMinify",
     "type": "library",
     "description": "Run modules node.js in you php.",
     "keywords": ["js", "ungflyjs", "minify", "css", "scss", "less", "combine media", "node.js"],
@@ -16,8 +16,8 @@
         "php": ">=5.3.0"
     },
     "autoload": {
-        "psr-0": {
-            "": "lib"
+        "psr-4": {
+            "yr4ik\\smMinify\\": "lib/"
         }
     }
 }

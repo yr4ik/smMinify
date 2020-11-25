@@ -3,6 +3,11 @@
 /**
  * @author Polevik Yurii <yr4ik_07@online.ua>
  */
+ 
+ 
+
+namespace yr4ik\smMinify;
+ 
 
 class smMinify
 {
@@ -25,7 +30,7 @@ class smMinify
 			if(is_dir($this->vendor_dir . '/node_modules'))
 				$exec[] = 'rm -rf node_modules/';
 			
-			$exec[] = 'npm install --no-package-lock';
+			$exec[] = 'npm install --no-package-lock 2>&1';
 			exec(implode(' && ', $exec));
 		}
 	}
@@ -35,23 +40,22 @@ class smMinify
      * @throws Exception
      * @return  array
      */
-    public function exec_css($css, $options=array())
+    public function exec_css($css, $data=array())
     {
 		if(!is_dir($this->vendor_dir . '/node_modules'))
 			throw new Exception('Not install node modules');
 		
-		$data = array();
-		$data['css'] = (array) $css;
-		$data['options'] = $options;
-		
+		$data['css'] = $css;
+
 		$output = $this->exec_proc($data);
 
-        
+// var_dump($output);
+// exit;
         if ($output['status'] == 'error') {
             throw new Exception($output['error']);
         }
         
-        return $output['code'];
+        return array($output['code'], $output['map'], $output['src_files']);
     }
 	
 	
@@ -61,18 +65,15 @@ class smMinify
      * @throws Exception
      * @return  array
      */
-    public function exec_js($js, $options=array())
+    public function exec_js($js, $data=array())
     {
 		if(!is_dir($this->vendor_dir . '/node_modules'))
 			throw new Exception('Not install node modules');
-		
-		$data = array();
+
 		$data['js'] = (array) $js;
-		$data['options'] = $options;
 		
 		$output = $this->exec_proc($data);
-
-        
+		
         if ($output['status'] == 'error') {
             throw new Exception($output['error']);
         }
