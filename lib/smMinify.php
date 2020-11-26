@@ -41,18 +41,21 @@ class smMinify
 			$exec = array();
 			$exec[] = 'cd ' . $this->vendor_dir;
 			
-
+			// rm old
 			if(is_dir($this->vendor_dir . '/node_modules'))
 				$exec[] = 'rm -rf node_modules/';
 
+			// create lock
 			$exec[] = 'mkdir node_modules/';
 			$exec[] = 'touch node_modules/.lock';
 			
-			if(!is_file($this->vendor_dir . '/package.json'))
-				$exec[] = 'cp "' . __DIR__ . '/vendor/package.json" "package.json"';
+			// copy package.json
+			$exec[] = 'cp "' . __DIR__ . '/vendor/package.json" "package.json"';
 			
+			// install
 			$exec[] = 'npm install --no-package-lock 2>&1';
 			
+			// unlock
 			$exec[] = 'rm node_modules/.lock';
 
 			exec(implode(' && ', $exec));
