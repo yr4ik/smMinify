@@ -34,7 +34,7 @@ class smMinify
 		}
 
 		if(is_file($this->vendor_dir . '/node_modules/.lock'))
-			die('nodejs was install');
+			die('nodejs installing');
 		
 		if(!is_dir($this->vendor_dir . '/node_modules') || filemtime( __DIR__ . '/vendor/package.json') > filemtime($this->vendor_dir . '/node_modules') )
 		{
@@ -59,6 +59,8 @@ class smMinify
 			$exec[] = 'rm node_modules/.lock';
 
 			exec(implode(' && ', $exec));
+			
+			die('nodejs installed');
 		}
 	}
 	
