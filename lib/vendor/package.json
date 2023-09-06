@@ -1,18 +1,19 @@
 {
 	"name": "smminify",
-	"version": "1.2",
+	"version": "1.2.0",
 	"author": {
 		"name": "Polevik Yurii",
 		"email": "yr4ik_07@online.ua"
 	},
 	"dependencies": {
+		"node": "18.17.1",
 		"uglify-js": "^3.17",
 		"postcss": "^8.4",
 		"postcss-import": "^15.0",
 		"postcss-url": "^10.1",
 		"less": "^3.12",
-		"node-sass": "^4.12",
-		"cssnano": "^6.1",
+		"node-sass": "^8.0",
+		"cssnano": "^6.0",
 		"autoprefixer": "^10.4",
 		"postcss-sort-media-queries": "^5.2"
 	}

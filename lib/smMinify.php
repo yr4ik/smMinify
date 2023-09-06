@@ -13,50 +13,60 @@ class smMinify
 {
 	private $vendor_dir;
 	
+	private $install_lock_file = 'install.lock';
+	
+	private $node_modules_dir = 'node_modules/';
+
+	
     /**
 	 * Constructor
 	 * Set directory of node modules $this->vendor_dir
-     * @param   string   $node_dir
+     * @param   string   $vendor_dir
      */
-    public function __construct($node_dir=false)
+    public function __construct($vendor_dir=false)
 	{
 		
 		if(!function_exists('exec'))
 			throw new \Exception('Function exec required for smMinify');
 
 		
-		if(empty($node_dir)){
+		if(empty($vendor_dir)){
 			$this->vendor_dir = __DIR__ . '/vendor';
 		}else{
-			$this->vendor_dir = rtrim($node_dir, '/');
+			$this->vendor_dir = rtrim($vendor_dir, '/');
 			if(!is_dir($this->vendor_dir))
 				mkdir($this->vendor_dir, 0755, true);
 		}
 
-		if(is_file($this->vendor_dir . '/node_modules/.lock'))
+		$this->vendor_dir .= '/';
+
+		if(is_file($this->vendor_dir . $this->install_lock_file))
 			die('nodejs installing');
 		
-		if(!is_dir($this->vendor_dir . '/node_modules') || filemtime( __DIR__ . '/vendor/package.json') > filemtime($this->vendor_dir . '/node_modules') )
+		if(!is_dir($this->vendor_dir . $this->node_modules_dir) || filemtime( __DIR__ . '/vendor/package.json') > filemtime($this->vendor_dir . $this->node_modules_dir) )
 		{
 			$exec = array();
 			$exec[] = 'cd ' . $this->vendor_dir;
 			
 			// rm old
-			if(is_dir($this->vendor_dir . '/node_modules'))
-				$exec[] = 'rm -rf node_modules/';
+			if(is_dir($this->vendor_dir . $this->node_modules_dir))
+				$exec[] = 'rm -rf ' . $this->node_modules_dir;
 
 			// create lock
-			$exec[] = 'mkdir node_modules/';
-			$exec[] = 'touch node_modules/.lock';
+			$exec[] = 'touch ' . $this->install_lock_file;
+			
+			// create modules dir
+			$exec[] = 'mkdir ' . $this->node_modules_dir;
 			
 			// copy package.json
 			$exec[] = 'cp "' . __DIR__ . '/vendor/package.json" "package.json"';
 			
-			// install
-			$exec[] = 'npm install --no-package-lock 2>&1';
+			// install node
+			$exec[] = 'npm install --no-package-lock 2>&1 | tee install.log';
+			
 			
 			// unlock
-			$exec[] = 'rm node_modules/.lock';
+			$exec[] = 'rm ' . $this->vendor_dir . $this->install_lock_file;
 
 			exec(implode(' && ', $exec));
 			
@@ -71,7 +81,7 @@ class smMinify
      */
     public function exec_css($css, $data=array())
     {
-		if(!is_dir($this->vendor_dir . '/node_modules'))
+		if(!is_dir($this->vendor_dir . $this->node_modules_dir))
 			throw new \Exception('Not install node modules');
 		
 		$data['css'] = $css;
@@ -94,7 +104,7 @@ class smMinify
      */
     public function exec_js($js, $data=array())
     {
-		if(!is_dir($this->vendor_dir . '/node_modules'))
+		if(!is_dir($this->vendor_dir . $this->node_modules_dir))
 			throw new \Exception('Not install node modules');
 
 		$data['js'] = (array) $js;
@@ -110,8 +120,8 @@ class smMinify
     
     private function exec_proc($data)
     {
-		$cmd = 'node ' . __DIR__ . '/vendor/smm_exec.js';
-		
+		$cmd = $this->vendor_dir . $this->node_modules_dir . 'node/bin/node  ' . __DIR__ . '/vendor/smm_exec.js';
+
         $nodejs = proc_open($cmd, 
             array(array('pipe', 'r'), array('pipe', 'w')),
             $pipes
@@ -121,7 +131,7 @@ class smMinify
             throw new \Exception('Could not reach node runtime');
         }
 		
-		$data['node_modules_dir'] = $this->vendor_dir . '/node_modules/';
+		$data['node_modules_dir'] = $this->vendor_dir . $this->node_modules_dir;
 
         $this->fwrite_stream($pipes[0],
             json_encode($data));
