@@ -9,7 +9,7 @@
 		"node": "18.17.1",
 		"uglify-js": "^3.17",
 		"postcss": "^8.4",
-		"postcss-import": "^15.0",
+		"postcss-import": "^15.1",
 		"postcss-url": "^10.1",
 		"less": "^3.12",
 		"node-sass": "^8.0",

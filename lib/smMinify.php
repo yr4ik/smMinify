@@ -127,19 +127,23 @@ class smMinify
             $pipes
         );
 
-        if (!is_resource($nodejs)) {
+        if (!is_resource($nodejs))
             throw new \Exception('Could not reach node runtime');
-        }
-		
+
+
 		$data['node_modules_dir'] = $this->vendor_dir . $this->node_modules_dir;
 
         $this->fwrite_stream($pipes[0],
             json_encode($data));
         fclose($pipes[0]);
 
-        $output = stream_get_contents($pipes[1]);
+        $output_str = stream_get_contents($pipes[1]);
 
-        $output = json_decode($output, true);
+        $output = json_decode($output_str, true);
+		
+		if(!$output && $output_str)
+			throw new \Exception($output_str);
+		
         fclose($pipes[1]);
         
         proc_close($nodejs);
