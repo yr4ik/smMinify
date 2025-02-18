@@ -1,6 +1,6 @@
 {
     "name": "yr4ik/smMinify",
-	"version": "1.2.1",
+	"version": "1.3.0",
     "type": "library",
     "description": "Run modules node.js in you php.",
     "keywords": ["js", "ungflyjs", "minify", "css", "scss", "less", "combine media", "node.js"],
